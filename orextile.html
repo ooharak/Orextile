@@ -1,0 +1,155 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content='text/html; charset="utf-8"' />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="orextile.js"></script>
+</head>
+<script type="text/orextile">
+
+h1. Orextile, a poor redmine-like wiki engine on top of JQuery
+
+{{toc}}
+
+h2. Overview
+
+scriptタグの中にRedmineのWikiの書式(Textile)で書いたものがHTMLに変換されて表示されます。
+Redmine環境にアクセスできないが、HTMLページはRedmine書式で書きたい、という事情がありまして急遽作りました。
+本来は公開を目的に作ったものではないので、場当たり的なコードになっています。
+
+h2. ローカルファイル制限について
+
+ヘッダ・フッタ・用語集機能を使うには、Chromeでは --allow-file-access-from-files をつける必要があります。
+
+h2. 利用できる記法
+
+h3. ヘッダ・フッタ
+
+ページと同じディレクトリにあるheader.txt, footer.txtが読み込まれます。
+
+h3. 見出しは h1 ... h4 で表現します。
+
+p. 文字列を -ハイフン- で囲うとSタグ、 *アスタリスク*はBタグに変換されます。
+
+p. なお開始アスタリスクの後に(aaa)のように指定するとCSSのクラス指定になりますが、(ref)のようにrefクラスを指定するとOrextileでは特別な意味をもち、カレントディレクトリのglossary.txtという用語集へのリンクになります。クリックすると用語の意味が表示されます。例えば *(ref)Orextile*のようになります。
+
+p. リンクは[[sub|サブページ]]のように張ります。subと指定するとsub.htmlへのリンクになります。
+
+p. RedmineにはURLを直書きするとリンクに変換する機能があったと思いますが実装していません。
+外部リンクを貼るときは "ダブルクオートとコロンによる記法":http://www.example.com/ を使います。
+
+
+* 箇条書きは
+** 行頭アスタリスクの個数で
+*** ネストします。
+
+<pre>
+  preは<pre>タグを使います。
+  Redmineの<pre><code class="java">というソースコード記法は未対応です。
+  なお、<pre class="ascii">だけは特別扱いでアスキーアートがcanvas要素で表現した図に変換されます。
+</pre>
+
+h3. 画像とマクロ
+
+画像はエクスクラメーション記法が使えます。
+
+!>clsv.png!
+
+{{raw(<div style="clear:both;" ></div>)}}
+
+h3. マクロ
+
+p. Redmineには{{..}}で囲むマクロというのがありますが、その記法を借用していくつかの機能を実現しています。
+
+h4. rawマクロ
+
+rawは引数内を生のHTMLとして解釈します。
+
+{{raw(<div style="border: 1px solid blue; background-color: #eeeeff; width: 400px; height: 225px; ">)}}
+
+for *example* , it is good.
+for _example_ , it is good.
+for -example- , it is good.
+for <code>example</code> , it is good.
+for *example* , it is good.
+for *example* , it is good.
+for *example* , it is good.
+for *example* , it is good.
+
+{{raw(</div>)}}
+
+h4. コメントマクロおよび複数行コメント
+
+//というマクロは１行コメントになります。
+{{//(comment)}}
+
+複数行コメントのときはHTMLのコメントを書きます。
+<!--
+コメントの中身は無視されます。
+-->
+
+
+
+
+h4. cadreマクロ
+
+囲み記事を作成します。
+
+{{cadre
+Lorem ipsum なんとかかんとか
+Lorem ipsum なんとかかんとか
+Lorem ipsum なんとかかんとか
+}}
+
+h4. tocマクロ
+
+Redmineに最初から組み込まれているものと大体同じで、目次を表示します。
+
+{{toc}}
+
+h3. ASCII図
+
+preタグにclass="ascii"を付したものはアスキーアートとみなされcanvas要素に変換されます。
+古いIEの場合はExplorerCanvasを入れていれば多分変換されるし、未対応の場合はpreとして表示されます。
+
+<pre class="ascii">
+
+ + +-+-+
+
+ + +-+-+
+ | | | |
+ + +-+-+
+ | | | |
+ + +-+-+
+
+------+-----+
+      | abc |
+      +-----+
+
+              Internet
+               |
+---------+-----+-------
+         |
+       firewall
+         |
+    -----+-------+------
+                 |
+                server
+
+</pre>
+
+
+h3. 表
+
+
+|_\2. 複数列|
+|a|b|
+
+---
+
+|_/3. 複数行|text|あいうえお|
+|イメージ|!clsv.png!|
+|\2. 複数行列組み合わせ|
+
+
+</script><body /></html>
+
