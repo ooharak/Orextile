@@ -60,9 +60,11 @@ $(function(){
         for (i = 0; i < param.lines.length; i++) {
           xmax = (xmax < param.lines[i].length ? param.lines[i].length : xmax);
         }
-        var dpi = 96;
-        var pt2px = function(pt) { return pt / 72.0 * dpi };
-        return parseMacro(param.name, [pt2px(10)*xmax*2, pt2px(10)*param.lines.length].join(","), param.lines, ctx);
+        //  min ( 0.8width, 12pt ) 
+        var w = Math.min($(document).width() * 0.8, xmax * 12 / 72.0 * 96);
+        var em = w / xmax;
+        var h = param.lines.length * 2.0 * em;
+        return parseMacro(param.name, [w, h].join(","), param.lines, ctx);
       } else {
         ctx.macro.lines.push(line);
         return '';
