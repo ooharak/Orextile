@@ -1,4 +1,4 @@
 Orextile
 ========
 
-a poor redmine-like wiki engine on top of JQuery
+a poor redmine-like wiki engine on top of JQuery.
